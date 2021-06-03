@@ -1,6 +1,8 @@
 package com.demo.test;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -11,6 +13,7 @@ import org.hibernate.service.ServiceRegistryBuilder;
 import com.demo.entity.Address;
 import com.demo.entity.Department;
 import com.demo.entity.Employee;
+import com.demo.entity.Project;
 
 public class RunnerMain {
 
@@ -77,6 +80,58 @@ public class RunnerMain {
         session.getTransaction().commit();
         session.close();
         
+        
+        
+        Project project=new Project();
+        Project project1=new Project();
+        project.setId(1);
+        project1.setId(2);
+
+        project.setVertical("Insurance");
+        project1.setVertical("Banking");
+        session=sessionFactory.openSession();
+        session.beginTransaction();
+        session.save(project);
+        session.save(project1);
+        session.getTransaction().commit();
+        session.close();
+        
+        
+        session=sessionFactory.openSession();
+        session.beginTransaction();
+        Employee ramesh=(Employee) session.get(Employee.class, 1);  
+        ramesh.setName("new Ramesh");
+        Department d=ramesh.getDepartment();
+        d.setDeptName("Full Stack Java");
+        ramesh.setDepartment(d);
+        session.update(ramesh);
+        
+        
+        System.out.println(d);
+        // Eager --> manytoone onetoone  -> lazy
+        
+        // onetoone manytoone eager
+        // onetomany manytomany lazy
+      
+        // cascade
+        // insert employee --> department
+        // ca
+        //employee container department --> save(emp)
+        
+        
+        
+        
+        List <Project> projects=new ArrayList<Project>();
+        projects.add(project);
+        projects.add(project1);
+
+        ramesh.setProjects(projects);
+        session.save(ramesh);
+        System.out.println(ramesh);
+        
+        
+        session.getTransaction().commit();
+        session.close();
         
         // mapping configuration
         // annotation
